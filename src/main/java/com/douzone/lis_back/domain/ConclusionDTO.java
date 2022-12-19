@@ -12,11 +12,12 @@ import java.time.LocalDateTime;
 public class ConclusionDTO {
     private Long resultNo;
     private Long registerCode;
-    private Long barcode;
+    private String barcode;
     private String inspectionCode;
     private String figures;
     private LocalDateTime inspectionDt;
     private LocalDateTime reportedDt;
     private String note;
     private String sampleNote;
+    private String orderCode;
 }

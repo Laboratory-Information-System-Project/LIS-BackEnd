@@ -17,4 +17,10 @@ public interface InspectionService {
 
     List<UnsuitableStatusDTO> getUnsuitableStatus();
 
+    void insertConclusionBatch(List<ConclusionDTO> conclusion);
+
+    void updateConclusionBatch(List<ConclusionDTO> conclusion);
+
+    void updatePrescribeStatus(Long prescribeCode);
+
 }

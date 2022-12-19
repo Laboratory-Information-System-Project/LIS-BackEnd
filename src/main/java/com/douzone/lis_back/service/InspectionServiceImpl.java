@@ -15,11 +15,13 @@ public class InspectionServiceImpl implements InspectionService{
 
     @Override
     public List<RegisterDTO> getUnregistered(){
+
         return mapper.getUnregisteredMapper();
     }
 
     @Override
     public List<RegisterDTO> getSearchRegister(SearchDTO search){
+
         return mapper.getSearchRegisterMapper(search);
     }
 
@@ -37,6 +39,21 @@ public class InspectionServiceImpl implements InspectionService{
 
     public List<UnsuitableStatusDTO> getUnsuitableStatus(){
         return mapper.getUnsuitableStatus();
+    }
+
+    @Override
+    public void insertConclusionBatch(List<ConclusionDTO> conclusion){
+        mapper.insertConclusionBatchMapper(conclusion);
+    }
+
+    @Override
+    public void updateConclusionBatch(List<ConclusionDTO> conclusion){
+        mapper.updateConclusionBatchMapper(conclusion);
+    }
+
+    @Override
+    public void updatePrescribeStatus(Long prescribeCode){
+        mapper.updatePrescribeStatusMapper(prescribeCode);
     }
 
 }
