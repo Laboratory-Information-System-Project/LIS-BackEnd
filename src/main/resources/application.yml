@@ -1,0 +1,36 @@
+server:
+  port: 8080
+jwt:
+  access-expired-time: 3600000
+  #  refresh-expired-time: 604800000
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+  #  refresh-token-name: refresh-token
+  access-token-name: access-token
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://lis-db.cwjfch0v8vje.ap-northeast-2.rds.amazonaws.com/user?allowMultiQueries=true
+    username: root
+    password: 12345678
+#    hikari:
+#      maximum-pool-size: 1
+#      connection-timeout: 5000
+#      connection-init-sql: SELECT 1
+#      validation-timeout: 2000
+#      minimum-idle: 10
+#      idle-timeout: 600000
+#      max-lifetime: 1800000
+logging:
+  pattern:
+    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+  level:
+    org:
+      springframework: DEBUG
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/**/*.xml

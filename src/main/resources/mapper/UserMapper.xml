@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.douzone.lis_back.mapper.user.UserMapper">
+    <select id="findByUsername" resultType="com.douzone.lis_back.domain.user.User">
+    select user_id as userId, department_code as departmentCode, username as username, password as password, user_name as name,
+           user_phonenumber as userPhoneNumber, user_address as userAddress, authority as authority, user_email as userEmail, join_dt as joinDt
+      from user
+     where username=#{username}
+    </select>
+</mapper>
