@@ -1,0 +1,28 @@
+server:
+  port: 8080
+jwt:
+  access-expired-time: 3600000
+  #  refresh-expired-time: 604800000
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+  access-token-name: access-token
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(een8k1tLPorwY1BX4hv0jgNhy7bXNfyJ+4Pp/xVOEIbCNtw66M88N/sNo8pF+PiaYrCl/j+zz7265NiyiET4CefwwWO9+f7zptW9nw8WT+CrQxroVytXzAsyEElRhVLVBnce8vunA8E3yPhSIMuq+w==)
+    username: root
+    password: ENC(Ul3QA3fCcxjukvjLMBqZyagnH/14kpod)
+
+logging:
+  pattern:
+    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+  level:
+    org:
+      springframework: DEBUG
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/**/*.xml
