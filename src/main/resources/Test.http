@@ -1,0 +1,12 @@
+POST /board/result
+Content-Type: application/json
+Host: localhost:8080
+
+{
+  "registerCode":"4",
+  "figures":"20",
+  "note":"업데이트",
+  "sampleNote":"하는중"
+}
+
+###
