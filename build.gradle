@@ -2,7 +2,9 @@ plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
+	id 'com.palantir.docker' version '0.22.1'
 }
+
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
@@ -40,4 +42,15 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+docker {
+	name 'suk97/lis-backend'
+	tag 'Dockerhub', "suk97/lis-backend"
+	dockerfile file('Dockerfile')
+	files tasks.bootJar.outputs.files
+	buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
+	labels(['key': 'value'])
+	pull true
+	noCache true
 }

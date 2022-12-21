@@ -15,7 +15,7 @@ public class UnsuitableSampleController {
     private final UnsuitableSampleService service;
 
     @GetMapping("/sample/search")
-    public List<Map<String, Object>> getSampleInfo(Long barcode, String authority) {
+    public List<Map<String, Object>> getSampleInfo(@RequestParam Long barcode, @RequestParam String authority) {
 
         return service.getSampleInfo(barcode, authority);
     }

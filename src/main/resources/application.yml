@@ -15,12 +15,12 @@ spring:
     url: jdbc:mysql://192.168.0.23:33306/data?allowMultiQueries=true
     username: scott
     password: tiger
-logging:
-  pattern:
-    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
-  level:
-    org:
-      springframework: DEBUG
+
+  api:
+    naver-sms-service-id: ncp:sms:kr:296262910669:lis-project
+    naver-sms-access-key: YoVm5953mBJcYIycnAU8
+    naver-sms-secret-key: fwUbvEheldNf6t5zlXrHaIm3UjejExNBokf3Fmaj
+    naver-caller-line: 01046766654
 
 mybatis:
   configuration:
