@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.douzone.lis_back.mapper.patientmapper.PatientMapper">
-    <select id="patientAll" resultType="com.douzone.lis_back.domain.PatientDTO">
+    <select id="patientAll" resultType="com.douzone.lis_back.domain.patientdomain.PatientDTO">
         SELECT DISTINCT PT.PATIENT_NO, PT.PATIENT_NAME, PT.patient_phonenumber
         FROM VISIT AS V, PRESCRIBE AS P, INSPECTION_TYPE AS I, VESSEL AS VL, SAMPLE_TYPE AS S, COLLECTING AS C, REGISTER AS R, CONCLUSION AS CN, PATIENT AS PT
         WHERE V.PATIENT_NO = #{data}
@@ -37,6 +37,9 @@
                                                                                    ON U.USER_ID = P.DOCTOR_ID) USERINFO
                                                             ON D.DEPARTMENT_CODE = USERINFO.DEPARTMENT_CODE) USERINFOS ON USERINFOS.VISIT_CODE = V.VISIT_CODE
         WHERE V.PATIENT_NO = #{patientNo}
+        <if test="visitStatus != '전체'.toString()">
+            AND V.VISIT_STATUS = #{visitStatus}
+        </if>
         ORDER BY VISIT_DT DESC;
     </select>
     <select id="patientData" resultType="com.douzone.lis_back.domain.patientdomain.PatientDomainDTO">

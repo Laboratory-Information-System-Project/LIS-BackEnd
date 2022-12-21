@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.douzone.lis_back.mapper.PrescribeMapper">
+    <select id="findPrescribeByVisitNo" resultType="HashMap">
+        select 상태.status_code, 상태.status_name, 처방.prescribe_dt, 직원정보.department_name, 내원정보.visit_status,
+               처방.prescribe_code, 오더정보.sample_code, 오더정보.vessel_code, 직원정보.user_name, 처방.order_code, 분류.classification_code
+        from prescribe 처방 left join (select 내원.visit_status, 내원.visit_code from visit 내원) 내원정보 on 처방.visit_code = 내원정보.visit_code
+                          left join (
+            select 직원.user_name, 직원.department_code, 직원.user_id, 과.department_name
+            from user 직원 left join department 과 on 과.department_code = 직원.department_code) 직원정보 on 직원정보.user_id = 처방.doctor_id
+                          left join (
+            select 오더.order_code, 용기.vessel_code, 용기.sample_code, 오더.classification_code
+            from order_slip 오더 left join vessel 용기 on 용기.vessel_code = 오더.vessel_code) 오더정보 on 오더정보.order_code = 처방.order_code
+                          left join classification 분류 on 분류.classification_code = 오더정보.classification_code
+                          left join inspection_status 상태 on 상태.status_code = 처방.status_code
+        where 처방.visit_code = #{visitNo};
+    </select>
+
+    <update id="update">
+        update prescribe
+           set status_code=#{status}
+         where prescribe_code in (
+             <foreach collection="prescribeCodeList" item="item" separator=",">
+                 ${item}
+             </foreach>
+             )
+    </update>
+
+    <select id="findStatus" resultType="String">
+        select p.status_code
+          from prescribe p
+         where prescribe_code in (
+             <foreach collection="prescribeCodeList" item="item" separator=",">
+                 ${item}
+             </foreach>
+             ) and status_code = #{status}
+    </select>
+</mapper>
+
+<!--        insert into inspection_type values('WBC','CBC','EDTA','백혈구수',' ','1000000');-->
+<!--        insert into inspection_type values('RBC','CBC','EDTA','적혈구수',' ','1000000');-->
+<!--        insert into inspection_type values('Hb','CBC','EDTA','헤모글로빈','dl','8');-->
+<!--        insert into inspection_type values('Hct','CBC','EDTA','적혈구용적률','%','24');-->
+<!--        insert into inspection_type values('MCV','CBC','EDTA','평균적혈구용적','fl','90');-->
+<!--        insert into inspection_type values('MCH','CBC','EDTA','평균적혈구색소','%','50');-->
+<!--        insert into inspection_type values('MCHC','CBC','EDTA','평균적혈구혈색소농도','%','50');-->
+<!--        insert into inspection_type values('PLT','CBC','EDTA','혈소판수',' ','100000');-->

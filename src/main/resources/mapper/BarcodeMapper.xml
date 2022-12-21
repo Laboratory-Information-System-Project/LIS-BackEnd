@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.douzone.lis_back.mapper.collecting.BarcodeMapper">
+    <select id="findBarcode" resultType="String">
+        select max(cg.barcode)
+        from collecting cg;
+    </select>
+
+
+
+    <select id="findBarcodeByPrescribeCode" resultType="HashMap">
+        select c.barcode, b.prescribe_code, b.status_code, i.status_name
+        from collecting c join prescribe b on b.prescribe_code = c.prescribe_code
+        join inspection_status i on b.status_code = i.status_code
+        where b.prescribe_code in (
+        <foreach collection="prescribeList" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <insert id="initBarcode">
+        {call sequence('barcode')}
+    </insert>
+
+    <insert id="insertNewBarcode">
+        <foreach collection="prescribeCodeList" item="item" index="index" separator=";">
+        insert into collecting (barcode, barcode_dt, barcode_printer_id, prescribe_code)
+            <choose>
+                <when test="index eq 0">
+            select
+            (
+                select concat(${today},
+                    (select LPAD ((select nextval('barcode') from dual), 5, 0)
+                  from dual)
+                     ) from dual ),
+                </when>
+                <otherwise>
+                    select
+                        (select concat(${today},
+                                LPAD(
+                            (select currval from sequences where name='barcode'),5,0))
+                    from dual),
+                </otherwise>
+            </choose>
+                now(), #{userId}, ${item}
+            from dual
+            where isnull((select c.barcode
+            from collecting c
+            where prescribe_code in(
+            ${item}
+            ) and isnull(cancel_barcode_dt) and is_canceled_inspection = 0))
+        </foreach>
+    </insert>
+
+    <update id="deleteBarcode" parameterType="String">
+    update collecting
+       set cancel_barcode_dt = now(), cancel_barcode_id = #{userId}
+     where prescribe_code in (
+         <foreach collection="barcodeList" item="item" separator=",">
+             ${item}
+         </foreach>
+         ) and isnull(cancel_barcode_dt);
+    </update>
+
+    <select id="findAllByPrescribeCodeForKafka" resultType="HashMap">
+        select barcode, prescribe_code, collector_id, barcode_printer_id,
+                barcode_dt, collecting_dt, cancel_barcode_dt, cancel_collecting_dt
+          from collecting
+         where prescribe_code in (
+             <foreach collection="prescribeCodeList" item="item" separator=",">
+                 #{item}
+             </foreach>
+        )
+    </select>
+    <select id="findBarcodeByPrescribeCodeList" resultType="HashMap">
+        SELECT barcode, prescribe_code
+        FROM collecting
+        WHERE prescribe_code IN (
+        <foreach collection="prescribeCodeList" item="item" separator=",">
+            ${item}
+        </foreach>
+        )
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+

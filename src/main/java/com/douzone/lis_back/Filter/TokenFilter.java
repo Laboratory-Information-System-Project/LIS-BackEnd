@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 
 @Slf4j
@@ -37,7 +38,7 @@ public class TokenFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         if(!"/user-service/login".equals(req.getRequestURI())) {
-            if (req.getHeader("Authorization").isEmpty()) {
+            if (Objects.isNull(req.getHeader("Authorization"))) {
 
                 log.error("not authorized");
 

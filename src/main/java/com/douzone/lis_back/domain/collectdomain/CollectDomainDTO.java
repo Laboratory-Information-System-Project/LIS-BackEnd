@@ -18,6 +18,7 @@ public class CollectDomainDTO {
     private String vesselCode;
     private String statusCode;
     private String sampleCode;
+    private String unsuitableReasonCode;
     private Date cancelBarcodeDt;
     private Date cancelCollectingDt;
     private Long patientNo;
