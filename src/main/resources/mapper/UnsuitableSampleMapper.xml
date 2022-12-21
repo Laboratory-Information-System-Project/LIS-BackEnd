@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.douzone.lis_back.mapper.unsuitable.UnsuitableSampleMapper">
+    <select id="findSampleByBarcode" resultType="HashMap" parameterType="map">
+        SELECT c.barcode AS barcode,
+        i.status_name AS statusName,
+        DATE_FORMAT(c.barcode_dt,'%Y-%m-%d') AS barcodeDt,
+        DATE_FORMAT(c.collecting_dt,'%Y-%m-%d') AS collectingDt,
+        v.vessel_code AS vesselCode,
+        u.authority AS authority,
+        p.status_code AS statusCode,
+        c.barcode_printer_id AS barcodePrinterUserId,
+        (SELECT user_name FROM user WHERE user_id=c.collector_id) AS collectorId,
+        c.collector_id AS collectorUserId,
+        u.user_name AS barcodePrinterId,
+        p.prescribe_code AS prescribeCode
+        FROM collecting AS c LEFT JOIN user AS u ON c.barcode_printer_id = u.user_id
+        LEFT JOIN prescribe AS p ON c.prescribe_code= p.prescribe_code
+        LEFT JOIN inspection_status AS i on p.status_code = i.status_code
+        LEFT JOIN order_slip AS o ON p.order_code = o.order_code
+        LEFT JOIN vessel AS v ON v.vessel_code= o.vessel_code
+        <if test="authority == 'inspector'">
+            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
+        </if>
+        <if test="authority == 'nurse'">
+            WHERE c.barcode = #{barcode} AND p.status_code = 'B';
+        </if>
+    </select>
+
+    <select id="findPrescribeByBarcode" resultType="HashMap" parameterType="map">
+        SELECT p.prescribe_code AS prescribeCode,
+        u.user_name AS userName,
+        o.order_name AS orderName,
+        p.doctor_id AS doctorId,
+        v.visit_status AS visitStatus,
+        ii.status_name AS statusName,
+        u.authority AS authority,
+        p.prescribe_contents AS prescribeContents,
+        DATE_FORMAT(p.prescribe_dt,'%Y-%m-%d') AS prescribeDt
+        FROM collecting AS c LEFT JOIN prescribe AS p ON c.prescribe_code = p.prescribe_code
+        LEFT JOIN user AS u ON p.doctor_id = u.user_id
+        LEFT JOIN visit AS v ON p.visit_code = v.visit_code
+        LEFT JOIN order_slip AS o ON o.order_code = p.order_code
+        LEFT JOIN inspection_status AS ii ON p.status_code = ii.status_code
+        <if test="authority == 'inspector'">
+            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
+        </if>
+        <if test="authority == 'nurse'">
+            WHERE c.barcode = #{barcode} AND p.status_code = 'B';
+        </if>
+    </select>
+
+    <select id="findUsersByUsername" resultType="Map" parameterType="String">
+        SELECT user_id AS userId,
+        user_name AS userName,
+        user_email AS userEmail,
+        authority
+        FROM user
+        WHERE authority != "검사자"  and user_name LIKE CONCAT('%', #{userName}, '%');
+    </select>
+
+    <select id="findAllUnsuitableReason" resultType="com.douzone.lis_back.domain.unsuitable.UnsuitableReasonDTO">
+        SELECT r.unsuitable_reason_code,
+        r.unsuitable_reason_name,
+        r.unsuitable_status_code,
+        s.unsuitable_status_name
+        FROM unsuitable_reason AS r LEFT JOIN unsuitable_status AS s
+        ON r.unsuitable_status_code = s.unsuitable_status_code
+        ORDER BY unsuitable_status_code DESC;
+    </select>
+
+    <select id="findUnsuitableSample" resultType="HashMap" parameterType="list">
+        SELECT unsuitable_reason_code,
+        barcode,
+        notified_user_id,
+        notificator_id,
+        unsuitable_reason_text,
+        prescribe_code
+        FROM data.unsuitable_status_management
+        WHERE prescribe_code IN
+        <foreach collection="sample" item="item" index="index" open="(" close=")" separator=",">
+            #{item.prescribeCode}
+        </foreach>
+        ;
+    </select>
+
+    <select id="findUnsuitByBarcode" resultType="map" parameterType="long">
+        SELECT m.unsuitable_reason_code AS unsuitableReasonCode,
+        m.notified_user_id AS notifiedUserId,
+        m.notificator_id AS notificatorId,
+        m.barcode,
+        m.prescribe_code AS prescribeCode,
+        s.unsuitable_status_name AS unsuitableStatusName,
+        r.unsuitable_reason_name AS unsuitableReasonName
+        FROM unsuitable_status_management AS m LEFT JOIN unsuitable_reason AS r ON m.unsuitable_reason_code = r.unsuitable_reason_code
+        LEFT JOIN unsuitable_status AS s ON r.unsuitable_status_code = s.unsuitable_status_code
+        WHERE barcode = #{barcode};
+    </select>
+
+    <insert id="insertUnsuitableSampleInfo" parameterType="Map">
+        INSERT INTO unsuitable_status_management (barcode, unsuitable_reason_code, unsuitable_reason_text, notificator_id, notified_user_id, unsuitable_update_dt, prescribe_code)
+        VALUES (#{sampleBarcode}, #{selectedReason}, #{query}, #{notificatorId}, #{notifiedId}, now(), #{prescribeCode});
+    </insert>
+</mapper>
