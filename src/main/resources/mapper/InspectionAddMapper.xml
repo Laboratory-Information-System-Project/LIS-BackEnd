@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.douzone.inspectionservice.mapper.InspectionAddMapper">
+<mapper namespace="com.douzone.lis_back.mapper.InspectionAddMapper">
     <insert id="InspectionAdd" parameterType="Map">
         INSERT into register
         (inspector_id,barcode,register_dt,prescribe_code)
@@ -14,11 +14,31 @@
         </if>
     </insert>
 
+    <update id="updatePrescribeCode" parameterType="HashMap">
+         UPDATE prescribe
+        SET status_code = 'S'
+        where prescribe_code in(
+        <foreach collection="prescribeList" item="item" separator=",">
+            #{item.prescribeCode}
+        </foreach>
+        )
+    </update>
+
     <update id="updateMapper">
             UPDATE register
             <set>
                 cancel_register_id = #{cancelRegisterId}, cancel_register_dt = now()
             </set>
             WHERE barcode = #{barcode};
+    </update>
+
+    <update id="updatePrescribeCodeData" parameterType="HashMap">
+        UPDATE prescribe
+        SET status_code = 'C'
+        where prescribe_code in(
+        <foreach collection="prescribeList" item="item" separator=",">
+            #{item.prescribeCode}
+        </foreach>
+        )
     </update>
 </mapper>

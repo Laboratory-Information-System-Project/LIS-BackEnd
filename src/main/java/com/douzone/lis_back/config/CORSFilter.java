@@ -34,8 +34,9 @@ public class CORSFilter implements Filter{
 
         if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
-        }
+        }else {
             chain.doFilter(req, res);
+        }
     }
 
     public void init(FilterConfig filterConfig) {}

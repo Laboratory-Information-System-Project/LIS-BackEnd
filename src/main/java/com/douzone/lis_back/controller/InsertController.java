@@ -21,11 +21,11 @@ public class InsertController {
         System.out.println(barcodeList.get("barcodeList"));
         service.InspectionAdd(barcodeList.get("barcodeList"));
     }
-//    @PostMapping("/kafka")
-//    public void kafka(@RequestBody HashMap<String ,String>barcodeList){
-//        System.out.println(barcodeList.get("barcodeList"));
-//        kafkaProducer.send("sendBarcodeUpdate",barcodeList.get("barcodeList"));
-//    }
+    @PostMapping("/inspection-service/kafka")
+    public void kafka(@RequestBody HashMap<String ,List<HashMap<String, Object>>>prescribeList){
+        System.out.println(prescribeList.get("prescribeList"));
+        service.updatePrescribeCode(prescribeList.get("prescribeList"));
+    }
 
     @PostMapping("/inspection-service/cancellation")
     public void cancellation(@RequestBody HashMap<String, String> updateData){
@@ -33,9 +33,9 @@ public class InsertController {
         service.updateMapper(updateData);
     }
 
-//    @PostMapping("/cancellationKafka")
-//    public  void cancellationKafka(@RequestBody HashMap<String,String> updateData){
-//        System.out.println(updateData);
-//        kafkaProducer.send("sendBarcodeReUpdate",updateData);
-//    }
+    @PostMapping("/inspection-service/cancellationKafka")
+    public  void cancellationKafka(@RequestBody HashMap<String ,List<HashMap<String, Object>>>prescribeList){
+        System.out.println(prescribeList.get("prescribeList"));
+        service.updatePrescribeCodeData(prescribeList.get("prescribeList"));
+    }
 }
