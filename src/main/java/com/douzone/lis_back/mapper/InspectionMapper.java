@@ -20,4 +20,12 @@ public interface InspectionMapper {
    String getPrescribeCode(Map<String, Object> barcode);
 
    List<UnsuitableStatusDTO> getUnsuitableStatus();
+
+    void insertConclusionBatchMapper(List<ConclusionDTO> conclusion);
+
+    void updateConclusionBatchMapper(List<ConclusionDTO> conclusion);
+
+    void updatePrescribeStatusMapper(Long registerCode, String status);
+
+
 }

@@ -39,4 +39,19 @@ public class InspectionServiceImpl implements InspectionService{
         return mapper.getUnsuitableStatus();
     }
 
+    @Override
+    public void insertConclusionBatch(List<ConclusionDTO> conclusion){
+        mapper.insertConclusionBatchMapper(conclusion);
+    }
+
+    @Override
+    public void updateConclusionBatch(List<ConclusionDTO> conclusion){
+        mapper.updateConclusionBatchMapper(conclusion);
+    }
+
+    @Override
+    public void updatePrescribeStatus(Long registerCode, String status){
+        mapper.updatePrescribeStatusMapper(registerCode, status);
+    }
+
 }
