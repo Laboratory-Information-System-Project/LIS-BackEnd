@@ -60,7 +60,7 @@ public class SecurityConfig {
     public CorsConfigurationSource configurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://lis-front-deploy-bucket.s3-website.ap-northeast-2.amazonaws.com"));
+        configuration.setAllowedOrigins(List.of("http://dpiezv2v8sa5.cloudfront.net/"));
         // configuration.addAllowedOrigin("http://localhost:3000");
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(List.of("GET,POST,PUT,OPTIONS,DELETE"));
@@ -73,7 +73,7 @@ public class SecurityConfig {
         // configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("http://lis-front-deploy-bucket.s3-website.ap-northeast-2.amazonaws.com/user-service/login", configuration);
+        source.registerCorsConfiguration("http://dpiezv2v8sa5.cloudfront.net/user-service/login", configuration);
         return source;
     }
 }
