@@ -5,6 +5,10 @@ plugins {
 	id 'com.palantir.docker' version '0.22.1'
 }
 
+jar {
+	enabled = false
+}
+
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
