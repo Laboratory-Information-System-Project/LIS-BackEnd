@@ -47,27 +47,25 @@ public class InspectionController {
 
 
     @PostMapping("/conclusion")
-    public List<String> insertConclusion(@RequestBody List<ConclusionDTO> conclusion){
-        System.out.println("dfdfdf");
-        String barcode =conclusion.get(0).getBarcode();
-        String orderCode =conclusion.get(0).getOrderCode();
+    public String insertConclusion(@RequestBody List<ConclusionDTO> conclusion){
 
-        String text1 = barcode;
-        String text2 = orderCode;
+//        String barcode =conclusion.get(0).getBarcode();
+//        String orderCode =conclusion.get(0).getOrderCode();
+//        System.out.println(conclusion.get(0));
+//
+//        String text1 = barcode;
+//        String text2 = orderCode;
+//
+//        List data = new ArrayList<>();
+//
+//        data.add(text1);
+//        data.add(text2);
 
-        List data = new ArrayList<>();
+        service.insertConclusionBatch(conclusion);
+        service.updatePrescribeStatus(conclusion.get(0).getRegisterCode(), "D");
 
-        data.add(text1);
-        data.add(text2);
 
-        try{
-            service.insertConclusionBatch(conclusion);
-        }catch (Exception e){
-            System.out.println(e);
-        }
-
-        System.out.println(data);
-        return data;
+        return "성공하였습니다.";
     }
 
     @PutMapping("/conclusion")
@@ -78,9 +76,8 @@ public class InspectionController {
     }
 
     @PutMapping("/status")
-    public String updatePrescribeStatus(Long prescribeCode) {
-        service.updatePrescribeStatus(prescribeCode);
-
+    public String updatePrescribeStatus(Long registerCode) {
+            service.updatePrescribeStatus(registerCode, "M");
         return "성공하였습니다.";
     }
 }

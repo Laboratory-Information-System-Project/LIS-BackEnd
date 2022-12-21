@@ -8,23 +8,24 @@
     <select id="getUnregisteredMapper" resultType="com.douzone.lis_back.domain.RegisterDTO">
         select *
         from prescribe as p left join collecting as c on p.prescribe_code = c.prescribe_code
-                            left join register as r on c.barcode = r.barcode
+                            left join register as r on c.barcode = r.barcode and r.prescribe_code = c.prescribe_code
                             left join visit as v on p.visit_code = v.visit_code
-        where p.status_code = "D" and c.cancel_barcode_dt is null and c.cancel_collecting_dt is null;
+        where p.status_code = "S" and c.cancel_barcode_dt is null and c.cancel_collecting_dt is null and r.cancel_register_dt is null;
     </select>
 
     <select id="getSearchRegisterMapper" resultType="com.douzone.lis_back.domain.RegisterDTO" parameterType="com.douzone.lis_back.domain.SearchDTO">
         select *
-        from register as r left join collecting as c on r.barcode = c.barcode
+        from register as r left join collecting as c on r.barcode = c.barcode and r.prescribe_code = c.prescribe_code
             left join prescribe as p on c.prescribe_code= p.prescribe_code
             left join order_slip as o on p.order_code = o.order_code
             left join visit as v on v.visit_code = p.visit_code
             left join patient as pat on pat.patient_no = v.patient_no
+        where r.cancel_register_dt is null and p.status_code in ("D", "S")
         <if test="barcode == null">
-        where left(r.register_dt, 10) between #{stDate} and #{endDate}
+        and left(r.register_dt, 10) between #{stDate} and #{endDate}
         </if>
         <if test="barcode != null">
-        where r.barcode LIKE concat('%',#{barcode},'%')
+        and r.barcode LIKE concat('%',#{barcode},'%')
         </if>
         ORDER BY r.register_dt DESC
     </select>
@@ -55,7 +56,7 @@
     <select id="getUnsuitableStatus" resultType="com.douzone.lis_back.domain.UnsuitableStatusDTO">
         select *
         from unsuitable_status_management as u
-                 left join unsuitable_reason as ur on ur.unsuitable_reason_code = u.unsuitable_reason_code;
+            left join unsuitable_reason as ur on ur.unsuitable_reason_code = u.unsuitable_reason_code;
     </select>
 
     <insert id="insertConclusionBatchMapper" parameterType="com.douzone.lis_back.domain.ConclusionDTO">
@@ -79,10 +80,10 @@
         </foreach>
     </update>
 
-    <update id="updatePrescribeStatusMapper" parameterType="Long">
+    <update id="updatePrescribeStatusMapper" parameterType="Object">
         update prescribe
-        set status_code="M"
-        where prescribe_code = #{prescribeCode}
+        set status_code= #{status}
+        where prescribe_code = (select prescribe_code from register where register_code=#{registerCode} and cancel_register_dt is null);
     </update>
 
 </mapper>

@@ -25,7 +25,7 @@ public interface InspectionMapper {
 
     void updateConclusionBatchMapper(List<ConclusionDTO> conclusion);
 
-    void updatePrescribeStatusMapper(Long prescribeCode);
+    void updatePrescribeStatusMapper(Long registerCode, String status);
 
 
 }

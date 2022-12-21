@@ -10,7 +10,6 @@ public interface InspectionService {
 
     List<RegisterDTO> getSearchRegister(SearchDTO search);
 
-
     List<InspectionTypeDTO> getSearchInspectionType(String orderCode);
 
     List<ConclusionDTO> getSelectConclusion(SearchDTO search);
@@ -21,6 +20,6 @@ public interface InspectionService {
 
     void updateConclusionBatch(List<ConclusionDTO> conclusion);
 
-    void updatePrescribeStatus(Long prescribeCode);
+    void updatePrescribeStatus(Long registerCode, String status);
 
 }
