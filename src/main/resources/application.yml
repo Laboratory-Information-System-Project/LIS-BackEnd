@@ -2,7 +2,6 @@ server:
   port: 8080
 jwt:
   access-expired-time: 3600000
-  #  refresh-expired-time: 604800000
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
   access-token-name: access-token
 
@@ -12,9 +11,6 @@ spring:
     url: ENC(V41cnySNYg4LBlI3zwPp6EA3Q+pMlTt5kBRLgzNcgE9ghcq04lqim4TUsUoS/OU8t36xZsVhx+BmGUb04SBNnlpXArkoPkG7X9yGTFxo5yGPiVHltX7hLU7dOwSFMKrIjaIoAOEAuqWNfqZNj1AexA==)
     username: root
     password: ENC(Ul3QA3fCcxjukvjLMBqZyagnH/14kpod)
-#    url: jdbc:mysql://192.168.0.23:33306/data?allowMultiQueries=true
-#    username: scott
-#    password: tiger
 
   api:
     naver-sms-service-id: ncp:sms:kr:296262910669:lis-project
