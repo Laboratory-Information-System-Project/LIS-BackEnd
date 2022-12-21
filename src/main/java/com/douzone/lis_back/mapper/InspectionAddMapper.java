@@ -10,4 +10,8 @@ public interface InspectionAddMapper {
        void InspectionAdd(List<Object> barcodeList);
        void updateMapper(HashMap<String,String>updateData);
 
+       Integer updatePrescribeCode(List<HashMap<String, Object>> prescribeList);
+
+       Integer updatePrescribeCodeData(List<HashMap<String, Object>> prescribeList);
+
 }

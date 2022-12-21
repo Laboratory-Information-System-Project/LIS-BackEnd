@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.douzone.lis_back.mapper.patientmapper.PatientMapper">
+    <select id="patientAll" resultType="com.douzone.lis_back.domain.PatientDTO">
+        SELECT DISTINCT PT.PATIENT_NO, PT.PATIENT_NAME, PT.patient_phonenumber
+        FROM VISIT AS V, PRESCRIBE AS P, INSPECTION_TYPE AS I, VESSEL AS VL, SAMPLE_TYPE AS S, COLLECTING AS C, REGISTER AS R, CONCLUSION AS CN, PATIENT AS PT
+        WHERE V.PATIENT_NO = #{data}
+        AND V.VISIT_CODE = P.VISIT_CODE
+        AND P.INSPECTION_CODE = I.INSPECTION_CODE
+        AND I.VESSEL_CODE = VL.VESSEL_CODE
+        AND VL.SAMPLE_CODE = S.SAMPLE_CODE
+        AND P.PRESCRIBE_CODE = C.PRESCRIBE_CODE
+        AND C.BARCODE = R.BARCODE
+        AND PT.PATIENT_NO = V.PATIENT_NO
+        AND R.REGISTER_CODE = CN.REGISTER_CODE
+        order by R.REGISTER_DT DESC;
+    </select>
+    <select id="findPatientInfoByPatientNo" resultType="HashMap">
+        SELECT P.PATIENT_NO, P.PATIENT_NAME, P.PATIENT_AGE, P.PATIENT_GENDER, P.PATIENT_RESIDENT_NUMBER, P.PATIENT_HEIGHT, P.PATIENT_WEIGHT, P.PATIENT_BLOOD_TYPE, P.PATIENT_MEMO
+        FROM patient P
+        WHERE PATIENT_NO = #{patientInfo}
+    </select>
+
+    <select id="findPatientInfoByPatientName" resultType="HashMap">
+        SELECT P.PATIENT_NO, P.PATIENT_NAME, P.PATIENT_AGE, P.PATIENT_GENDER, P.PATIENT_RESIDENT_NUMBER, P.PATIENT_HEIGHT, P.PATIENT_WEIGHT, P.PATIENT_BLOOD_TYPE, P.PATIENT_MEMO
+        FROM patient P
+        WHERE PATIENT_NAME = #{patientInfo}
+    </select>
+
+    <select id="findVisitDataByPatientNo" resultType="HashMap">
+        SELECT DISTINCT V.VISIT_CODE, V.VISIT_DT, V.VISIT_STATUS, USER_NAME, DEPARTMENT_NAME
+        FROM visit V LEFT JOIN (SELECT USERINFO.USER_NAME, D.DEPARTMENT_NAME, USERINFO.VISIT_CODE
+                                FROM department D LEFT JOIN (SELECT U.USER_NAME, U.DEPARTMENT_CODE, P.VISIT_CODE
+                                                             FROM user U LEFT JOIN prescribe P
+                                                                                   ON U.USER_ID = P.DOCTOR_ID) USERINFO
+                                                            ON D.DEPARTMENT_CODE = USERINFO.DEPARTMENT_CODE) USERINFOS ON USERINFOS.VISIT_CODE = V.VISIT_CODE
+        WHERE V.PATIENT_NO = #{patientNo}
+        ORDER BY VISIT_DT DESC;
+    </select>
+    <select id="patientData" resultType="com.douzone.lis_back.domain.patientdomain.PatientDomainDTO">
+        select DISTINCT
+        patient.patient_no,patient_name,patient_age,patient_blood_type,
+        patient_height,patient_weight,patient_address,patient_phonenumber,
+        patient_resident_number,patient_gender,
+        collecting.cancel_barcode_dt,collecting.cancel_collecting_dt,
+        prescribe.status_code
+        from collecting
+        join prescribe on collecting.prescribe_code = prescribe.prescribe_code
+        join visit on prescribe.visit_code = visit.visit_code
+        join patient on visit.patient_no = patient.patient_no
+        where collecting.barcode = #{barcode} and (prescribe.status_code = 'C' or prescribe.status_code = 'D' or prescribe.status_code = 'S') and collecting.cancel_barcode_dt is null and collecting.cancel_collecting_dt is null;
+    </select>
+</mapper>
+
+<!--        select distinct 환자정보.patient_no, 환자정보.patient_name, 환자정보.patient_age, 환자정보.patient_blood_type,-->
+<!--        환자정보.patient_height, 환자정보.patient_weight, 환자정보.patient_address, 환자정보.patient_phonenumber,-->
+<!--        환자정보.patient_resident_number, 환자정보.patient_gender, 환자정보.visit_code, 환자정보.visit_dt,-->
+<!--        환자정보.visit_status, 유저정보.user_name, 유저정보.department_name-->
+<!--        from-->
+<!--        ( select 유저.user_name, 유저.user_id, 과.department_name-->
+<!--        from `user` 유저, department 과-->
+<!--        where 유저.department_code = 과.department_code) 유저정보-->
+<!--        right join (-->
+<!--        select 환자.patient_no, 환자.patient_name, 환자.patient_age, 환자.patient_blood_type,-->
+<!--        환자.patient_height, 환자.patient_weight, 환자.patient_address, 환자.patient_phonenumber,-->
+<!--        환자.patient_resident_number, 환자.patient_gender, 내원정보.visit_code, 내원정보.visit_dt,-->
+<!--        내원정보.visit_status, 내원정보.doctor_id-->
+<!--        from patient 환자 right join ( select distinct 내원.visit_code, 내원.visit_dt, 내원.visit_status, 처방.doctor_id, 내원.patient_no-->
+<!--        from visit 내원 right join prescribe 처방 on 내원.visit_code-->
+<!--        where 내원.visit_code = 처방.visit_code) 내원정보-->
+<!--        on 환자.patient_no-->
+<!--        where 환자.patient_no = 내원정보.patient_no and 환자.patient_no = #{patientNo}-->
+<!--<if test="visitStatus != '전체'.toString()">-->
+<!--and 내원정보.visit_status = #{visitStatus}-->
+<!--</if>-->
+<!--        )환자정보 on 환자정보.doctor_id = 유저정보.user_id;-->

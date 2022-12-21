@@ -21,4 +21,14 @@ public class InsertServiceImpl implements InsertService{
         mapper.updateMapper(updateData);
     }
 
+    @Override
+    public void updatePrescribeCode(List<HashMap<String, Object>> prescribeList) {
+        mapper.updatePrescribeCode(prescribeList);
+    }
+
+    @Override
+    public void updatePrescribeCodeData(List<HashMap<String, Object>> prescribeList) {
+        mapper.updatePrescribeCodeData(prescribeList);
+    }
+
 }

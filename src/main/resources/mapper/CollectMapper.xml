@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.douzone.lis_back.mapper.collectmapper.CollectMapper">
+    <select id="colletData" resultType="com.douzone.lis_back.domain.collectdomain.CollectDomainDTO">
+        select DISTINCT
+        collecting.barcode,collecting_dt,collector_id,collecting.prescribe_code,
+        prescribe.status_code,
+        order_slip.order_code,order_slip.vessel_code,
+        visit.patient_no,
+        vessel.sample_code,
+        collecting.cancel_barcode_dt,collecting.cancel_collecting_dt,
+        inspection_status.status_name,
+        user.user_name
+        from collecting
+        join user on collecting.collector_id = user.user_id
+        join prescribe on collecting.prescribe_code = prescribe.prescribe_code
+        join visit on prescribe.visit_code = visit.visit_code
+        join inspection_status on prescribe.status_code = inspection_status.status_code
+        join order_slip on prescribe.order_code = order_slip.order_code
+        join vessel on order_slip.vessel_code = vessel.vessel_code
+        where collecting.barcode = #{barcode} and (prescribe.status_code = 'C' or prescribe.status_code = 'D' or prescribe.status_code = 'S') and collecting.cancel_barcode_dt is null and collecting.cancel_collecting_dt is null;
+    </select>
+
+    <select id="getCodeData" resultType="Map" parameterType="Map">
+        select DISTINCT
+        unsuitable_status_code,collecting.prescribe_code
+        from collecting
+        left join unsuitable_status_management on collecting.barcode = unsuitable_status_management.barcode
+        left join unsuitable_reason on unsuitable_status_management.unsuitable_reason_code = unsuitable_reason.unsuitable_reason_code
+        where collecting.barcode = #{barcode}
+    </select>
+</mapper>
