@@ -58,7 +58,7 @@ public class JwtTokenProvider {
 
         String accessToken = JWT.create()
                 .withSubject(authentication.getName())
-                .withExpiresAt(new Date(now + 3600000))
+                .withExpiresAt(new Date(now + 360000000))
                 .withIssuer("issuer")
                 .withClaim("auth", authorities)
                 .sign(algorithm);
