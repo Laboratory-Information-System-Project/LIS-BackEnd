@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UnsuitableStatusDTO {
-    private Long barcode;
+    private String barcode;
     private Long prescribeCode;
     private String unsuitableStatusCode;
     private String unsuitableReasonCode;

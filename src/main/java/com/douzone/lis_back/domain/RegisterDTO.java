@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class RegisterDTO {
     private Long registerCode;
     private String inspectorId;
-    private Long barcode;
+    private String barcode;
     private LocalDateTime registerDt;
     private String orderCode;
     private Long resultNo;

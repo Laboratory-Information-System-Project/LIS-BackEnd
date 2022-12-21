@@ -24,4 +24,6 @@ public interface BarcodeMapper {
     Integer deleteBarcode(List<String> barcodeList, String userId);
 
     List<Map<Object, Object>> findAllByPrescribeCodeForKafka(List<String> prescribeCodeList);
+
+    List<String> checkStatus(List<Object> prescribeCodeList);
 }

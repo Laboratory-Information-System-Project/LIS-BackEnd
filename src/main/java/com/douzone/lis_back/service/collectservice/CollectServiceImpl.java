@@ -14,10 +14,9 @@ import java.util.List;
 public class CollectServiceImpl implements CollectService{
 
     private final CollectMapper collectMapper;
-    private final CollectingMapper collectingMapper;
     @Override
     public List<CollectDomainDTO> colletData(String barcode) {
-        return collectingMapper.colletData(barcode);
+        return collectMapper.colletData(barcode);
     }
 
     @Override

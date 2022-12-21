@@ -24,7 +24,17 @@ public class BarcodeServiceImpl implements BarcodeService {
         String barcode = barcodeMapper.findBarcode();
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
 
+        // List<String> statusCode = barcodeMapper.checkStatus(prescribeCodeList.get("prescribeCodeList"));
+
+        // for (int i = 0; i < statusCode.size(); i++) {
+        //     if(!"X".equals(statusCode.get(i))){
+        //         return "failed create barcode!";
+        //     }
+        //
+        // }
+
         // barcode가 없을때
+
         if (Objects.isNull(barcode) || Objects.equals(false, today.matches(barcode.substring(0,6)))) {
             // 시퀀스를 초기화 하고 바코드를 새로 생성
             barcodeMapper.initBarcode();

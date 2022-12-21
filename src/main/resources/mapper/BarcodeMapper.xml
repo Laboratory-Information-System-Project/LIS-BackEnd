@@ -81,6 +81,16 @@
         <foreach collection="prescribeCodeList" item="item" separator=",">
             ${item}
         </foreach>
+        ) and isnull(cancel_barcode_dt)
+    </select>
+
+    <select id="checkStatus">
+        select status_code
+          from prescribe
+         where prescribe_code in (
+        <foreach collection="prescribeCodeList" item="item" separator=",">
+            ${item}
+        </foreach>
         )
     </select>
 </mapper>
