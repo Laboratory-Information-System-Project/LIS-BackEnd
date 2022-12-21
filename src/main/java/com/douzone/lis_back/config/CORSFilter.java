@@ -22,7 +22,8 @@ public class CORSFilter implements Filter{
             throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request= (HttpServletRequest) req;
-        response.setHeader("Access-Control-Allow-Origin", "https://dpiezv2v8sa5.cloudfront.net");
+        String host = "https://" + request.getServerName() + ":" +Integer.toString(request.getServerPort());
+        response.setHeader("Access-Control-Allow-Origin", host);
         response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,OPTIONS,DELETE");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Max-Age", "3600");
