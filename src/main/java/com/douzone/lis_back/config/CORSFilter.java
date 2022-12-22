@@ -23,7 +23,7 @@
          HttpServletResponse response = (HttpServletResponse) res;
          HttpServletRequest request= (HttpServletRequest) req;
          String host = "https://" + request.getServerName() + ":" +Integer.toString(request.getServerPort());
-         response.setHeader("Access-Control-Allow-Origin", "*");
+         response.setHeader("Access-Control-Allow-Origin", "http://lis-front-deploy-bucket.s3-website.ap-northeast-2.amazonaws.com");
          response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,OPTIONS,DELETE");
          response.setHeader("Access-Control-Allow-Credentials", "true");
          response.setHeader("Access-Control-Allow-Max-Age", "3600");
