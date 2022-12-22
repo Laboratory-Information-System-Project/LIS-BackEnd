@@ -25,14 +25,14 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    @Bean
-    CORSFilter corsFilter(){
-        return new CORSFilter();
-    }
+    // @Bean
+    // CORSFilter corsFilter(){
+    //     return new CORSFilter();
+    // }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .addFilterBefore(corsFilter(), SessionManagementFilter.class)
+                // .addFilterBefore(corsFilter(), SessionManagementFilter.class)
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -56,25 +56,25 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Bean
-    public CorsConfigurationSource configurationSource(){
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowedOrigins(List.of("http://dpiezv2v8sa5.cloudfront.net/"));
-        // configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedMethods(List.of("GET,POST,PUT,OPTIONS,DELETE"));
-        configuration.setAllowedHeaders(List.of("X-Requested-With, Content-Type, "
-                + "Authorization, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers" +
-                ", Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Credentials" +
-                ",Access-Control-Allow-Headers"));
-        // configuration.addAllowedHeader();
-        // configuration.addAllowedMethod("GET,POST,PUT,OPTIONS,DELETE");
-        // configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("http://dpiezv2v8sa5.cloudfront.net/user-service/login", configuration);
-        return source;
-    }
+    // @Bean
+    // public CorsConfigurationSource configurationSource(){
+    //     CorsConfiguration configuration = new CorsConfiguration();
+    //
+    //     configuration.setAllowedOrigins(List.of("http://dpiezv2v8sa5.cloudfront.net/"));
+    //     // configuration.addAllowedOrigin("http://localhost:3000");
+    //     configuration.setAllowCredentials(true);
+    //     configuration.setAllowedMethods(List.of("GET,POST,PUT,OPTIONS,DELETE"));
+    //     configuration.setAllowedHeaders(List.of("X-Requested-With, Content-Type, "
+    //             + "Authorization, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers" +
+    //             ", Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Credentials" +
+    //             ",Access-Control-Allow-Headers"));
+    //     // configuration.addAllowedHeader();
+    //     // configuration.addAllowedMethod("GET,POST,PUT,OPTIONS,DELETE");
+    //     // configuration.setAllowCredentials(true);
+    //
+    //     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    //     source.registerCorsConfiguration("http://localhost:8080/user-service/login", configuration);
+    //     return source;
+    // }
 }
 
