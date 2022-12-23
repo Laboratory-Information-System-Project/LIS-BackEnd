@@ -21,10 +21,10 @@
         left join visit as v on v.visit_code = p.visit_code
         left join patient as pat on pat.patient_no = v.patient_no
         where r.cancel_register_dt is null and p.status_code in ("D", "S")
-        <if test="barcode == null">
+        <if test="barcode == ''">
             and left(r.register_dt, 10) between #{stDate} and #{endDate}
         </if>
-        <if test="barcode != null">
+        <if test="barcode != ''">
             and r.barcode LIKE concat('%',#{barcode},'%')
         </if>
         ORDER BY r.register_dt DESC

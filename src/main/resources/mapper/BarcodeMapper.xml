@@ -15,9 +15,9 @@
         join inspection_status i on b.status_code = i.status_code
         where b.prescribe_code in (
         <foreach collection="prescribeList" item="item" separator=",">
-            #{item}
+            ${item}
         </foreach>
-        )
+        ) and isnull(cancel_barcode_dt)
     </select>
 
     <insert id="initBarcode">
@@ -84,7 +84,7 @@
         ) and isnull(cancel_barcode_dt)
     </select>
 
-    <select id="checkStatus">
+    <select id="checkStatus" resultType="String">
         select status_code
           from prescribe
          where prescribe_code in (

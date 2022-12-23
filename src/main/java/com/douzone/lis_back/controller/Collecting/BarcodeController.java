@@ -21,13 +21,14 @@ public class BarcodeController {
     @ResponseStatus(HttpStatus.CREATED)
     public List<Map<String, Object>> newBarcode (@RequestBody Map<String, List<Object>> prescribeInfoList) {
         String result = barcodeService.createBarcode(prescribeInfoList);
-        List<String> prescribeCodes = prescribeInfoList.get("prescribeCodeList").stream().map(item-> item.toString()).collect(Collectors.toList());
+        List<Object> prescribeCodes = prescribeInfoList.get("prescribeCodeList");
         List<Map<String,Object>> barcode = new ArrayList<>();
         barcode.add(Collections.singletonMap("message", result));
 
-        barcode.addAll(barcodeService.getBarcodeList(prescribeCodes));
         if("create barcode successfully!".equals(result)) {
             prescribeService.updateStatus("B", prescribeCodes);
+            barcode.add(Collections.singletonMap("status", "바코드출력"));
+            barcode.addAll(barcodeService.getBarcodeList(prescribeCodes));
         }
 
         return barcode;
@@ -35,18 +36,25 @@ public class BarcodeController {
 
     @PutMapping("/barcode")
     @Transactional
-    public String cancelBarcode(@RequestBody Map<String, List<String>> barcodeListMap){
-        List<String> prescribeCodeList = barcodeListMap.get("prescribeCodeList");
+    public List<Map<String,Object>> cancelBarcode(@RequestBody Map<String, List<Object>> barcodeListMap){
+        List<Object> prescribeCodeList = new ArrayList<>();
+        barcodeListMap.get("prescribeCodeList").stream().forEach(item-> prescribeCodeList.add(Integer.parseInt(item.toString())));
+        List<Map<String,Object>> forReturn = new ArrayList<>();
 
         if(prescribeService.getStatus(prescribeCodeList, "B").size() != prescribeCodeList.size()){
-            return "바코드출력 상태가 아닌 바코드가 선택되었습니다";
+            forReturn.add(Collections.singletonMap("message","바코드출력 상태가 아닌 바코드가 선택되었습니다"));
+            return forReturn;
         }
 
-        String result = barcodeService.removeBarcode(barcodeListMap);
+        List<Map<String,Object>> tmp = barcodeService.getBarcodeList(prescribeCodeList);
 
+        String message = barcodeService.removeBarcode(barcodeListMap);
+        forReturn.add(Collections.singletonMap("message", message));
+        if("선택하신 바코드 발급이 취소되었습니다".equals(message)) {
             prescribeService.updateStatus("X", barcodeListMap.get("prescribeCodeList"));
-        prescribeCodeList.add(result);
-
-        return result;
+            forReturn.add(Collections.singletonMap("status", "처방"));
+            forReturn.addAll(tmp);
+        }
+        return forReturn;
     }
 }

@@ -20,7 +20,7 @@
         join inspection_status on prescribe.status_code = inspection_status.status_code
         join order_slip on prescribe.order_code = order_slip.order_code
         join vessel on order_slip.vessel_code = vessel.vessel_code
-        where collecting.barcode = #{barcode} and (prescribe.status_code = 'C' or prescribe.status_code = 'D' or prescribe.status_code = 'S') and collecting.cancel_barcode_dt is null and collecting.cancel_collecting_dt is null;
+        where collecting.barcode = #{barcode} and (prescribe.status_code = 'C' or prescribe.status_code = 'S') and collecting.cancel_barcode_dt is null and collecting.cancel_collecting_dt is null;
     </select>
 
     <select id="getCodeData" resultType="Map" parameterType="Map">

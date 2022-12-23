@@ -53,7 +53,7 @@
         join prescribe on collecting.prescribe_code = prescribe.prescribe_code
         join visit on prescribe.visit_code = visit.visit_code
         join patient on visit.patient_no = patient.patient_no
-        where collecting.barcode = #{barcode} and (prescribe.status_code = 'C' or prescribe.status_code = 'D' or prescribe.status_code = 'S') and collecting.cancel_barcode_dt is null and collecting.cancel_collecting_dt is null;
+        where collecting.barcode = #{barcode} and (prescribe.status_code = 'C' or prescribe.status_code = 'S') and collecting.cancel_barcode_dt is null and collecting.cancel_collecting_dt is null;
     </select>
 </mapper>
 

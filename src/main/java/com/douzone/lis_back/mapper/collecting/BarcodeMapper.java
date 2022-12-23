@@ -17,11 +17,11 @@ public interface BarcodeMapper {
 
     void initBarcode();
 
-    List<Map<String, Object>> findBarcodeByPrescribeCode(List<String> prescribeList);
+    List<Map<String, Object>> findBarcodeByPrescribeCode(List<Object> prescribeList);
 
     List<Map<String, Object>> findBarcodeByPrescribeCodeList(List<String> prescribeCodeList);
 
-    Integer deleteBarcode(List<String> barcodeList, String userId);
+    Integer deleteBarcode(List<Object> barcodeList, Object userId);
 
     List<Map<Object, Object>> findAllByPrescribeCodeForKafka(List<String> prescribeCodeList);
 

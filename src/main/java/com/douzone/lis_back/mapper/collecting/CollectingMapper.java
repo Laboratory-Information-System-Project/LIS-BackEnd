@@ -7,13 +7,13 @@ import java.util.List;
 
 @Mapper
 public interface CollectingMapper {
-    List<String> findCollectedPrescribeCode(List<String> barcodeList);
+    List<String> findCollectedPrescribeCode(List<Object> barcodeList);
 
-    Integer updateCollectingData(List<String> barcodeList, String userId);
+    Integer updateCollectingData(List<Object> barcodeList, Object userId);
 
     List<String> findPrescribeCodeByBarcode(List<String> barcodeList);
 
-    Integer deleteCollectingData(List<String> barcodeList, String userId);
+    Integer deleteCollectingData(List<Object> barcodeList, Object userId);
 
     void updateCollectingForDelete(List<String> prescribeCodeList);
     void updateCancelInspection(Object prescribeCode, String status);

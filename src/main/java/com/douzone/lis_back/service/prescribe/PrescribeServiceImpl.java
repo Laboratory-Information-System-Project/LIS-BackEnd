@@ -28,13 +28,13 @@ public class PrescribeServiceImpl implements PrescribeService{
     }
 
     @Override
-    public Integer updateStatus(String status, List<String> prescribeCodeList) {
+    public Integer updateStatus(String status, List<Object> prescribeCodeList) {
 
         return prescribeMapper.update(prescribeCodeList, status);
     }
 
     @Override
-    public List<String> getStatus(List<String> prescribeCodeList, String status) {
+    public List<String> getStatus(List<Object> prescribeCodeList, String status) {
 
         return prescribeMapper.findStatus(prescribeCodeList, status);
     }

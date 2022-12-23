@@ -9,7 +9,7 @@ import java.util.Map;
 public interface PrescribeMapper {
     List<Map<String, Object>> findPrescribeByVisitNo(Long visitNo);
 
-    Integer update(List<String> prescribeCodeList, String status);
+    Integer update(List<Object> prescribeCodeList, String status);
 
-    List<String> findStatus(List<String> prescribeCodeList, String status);
+    List<String> findStatus(List<Object> prescribeCodeList, String status);
 }

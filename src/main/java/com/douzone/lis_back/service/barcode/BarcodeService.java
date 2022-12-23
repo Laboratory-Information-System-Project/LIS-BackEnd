@@ -6,9 +6,9 @@ import java.util.Map;
 public interface BarcodeService {
     String createBarcode(Map<String, List<Object>> prescribeCodeList);
 
-    List<Map<String, Object>> getBarcodeList(List<String> prescribeCodeList);
+    List<Map<String, Object>> getBarcodeList(List<Object> prescribeCodeList);
 
-    String removeBarcode(Map<String, List<String>> barcodeList);
+    String removeBarcode(Map<String, List<Object>> barcodeList);
 
     List<Map<Object, Object>> getAll(List<String> prescribeCodeList);
 

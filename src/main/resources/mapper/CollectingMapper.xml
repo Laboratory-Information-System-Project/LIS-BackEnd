@@ -5,10 +5,10 @@
 
     <update id="updateCollectingData">
         update collecting
-        set collecting_dt = now(), collector_id = #{userId}
+        set collecting_dt = now(), collector_id = ${userId}
         where prescribe_code in (
         <foreach collection="barcodeList" item="item" separator=",">
-            #{item}
+            ${item}
         </foreach>
         ) and isnull(cancel_barcode_dt)  and is_canceled_inspection = 0;
         -- FIXME 채혈자 id 토큰에 있는걸로 할것

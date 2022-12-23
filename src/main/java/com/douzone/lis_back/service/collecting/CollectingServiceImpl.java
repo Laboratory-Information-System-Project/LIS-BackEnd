@@ -19,7 +19,7 @@ public class CollectingServiceImpl implements CollectingService{
 
     @Override
     @Transactional
-    public String collect(Map<String, List<String>> prescribeCodeList) {
+    public String collect(Map<String, List<Object>> prescribeCodeList) {
 
         if(!collectingMapper.findCollectedPrescribeCode(prescribeCodeList.get("prescribeCodeList")).isEmpty()){
             return "collecting data already exists";
@@ -44,7 +44,7 @@ public class CollectingServiceImpl implements CollectingService{
 
     @Override
     @Transactional
-    public String removeCollectingInfo(Map<String, List<String>> prescribeCodeList) {
+    public String removeCollectingInfo(Map<String, List<Object>> prescribeCodeList) {
         Integer result = collectingMapper.deleteCollectingData(prescribeCodeList.get("prescribeCodeList"), prescribeCodeList.get("userId").get(0));
 
         if(result == prescribeCodeList.get("prescribeCodeList").size()){

@@ -24,14 +24,14 @@ public class BarcodeServiceImpl implements BarcodeService {
         String barcode = barcodeMapper.findBarcode();
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
 
-        // List<String> statusCode = barcodeMapper.checkStatus(prescribeCodeList.get("prescribeCodeList"));
+        List<String> statusCode = barcodeMapper.checkStatus(prescribeCodeList.get("prescribeCodeList"));
 
-        // for (int i = 0; i < statusCode.size(); i++) {
-        //     if(!"X".equals(statusCode.get(i))){
-        //         return "failed create barcode!";
-        //     }
-        //
-        // }
+        for (int i = 0; i < statusCode.size(); i++) {
+            if(!"X".equals(statusCode.get(i))){
+                return "failed create barcode!";
+            }
+
+        }
 
         // barcode가 없을때
 
@@ -47,13 +47,13 @@ public class BarcodeServiceImpl implements BarcodeService {
     }
 
     @Override
-    public List<Map<String, Object>> getBarcodeList(List<String> prescribeCodeList) {
+    public List<Map<String, Object>> getBarcodeList(List<Object> prescribeCodeList) {
 
         return barcodeMapper.findBarcodeByPrescribeCode(prescribeCodeList);
     }
 
     @Override
-    public String removeBarcode(Map<String, List<String>> barcodeList) {
+    public String removeBarcode(Map<String, List<Object>> barcodeList) {
         Integer result = barcodeMapper.deleteBarcode(barcodeList.get("prescribeCodeList"), barcodeList.get("userId").get(0));
 
         if(result == barcodeList.get("prescribeCodeList").size()){

@@ -7,7 +7,7 @@ public interface PrescribeService {
 
     List<Map<String, Object>> getPrescribeInfoByVisitNo(Long visitNo);
 
-    Integer updateStatus(String status, List<String> prescribeCodeList);
+    Integer updateStatus(String status, List<Object> prescribeCodeList);
 
-    List<String> getStatus(List<String> prescribeCodeList, String c);
+    List<String> getStatus(List<Object> prescribeCodeList, String c);
 }

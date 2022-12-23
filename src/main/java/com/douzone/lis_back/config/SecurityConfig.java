@@ -25,14 +25,14 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    // @Bean
-    // CORSFilter corsFilter(){
-    //     return new CORSFilter();
-    // }
+    @Bean
+    CORSFilter corsFilter(){
+        return new CORSFilter();
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // .addFilterBefore(corsFilter(), SessionManagementFilter.class)
+                .addFilterBefore(corsFilter(), SessionManagementFilter.class)
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
