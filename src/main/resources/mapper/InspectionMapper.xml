@@ -6,57 +6,54 @@
 <mapper namespace="com.douzone.lis_back.mapper.InspectionMapper">
 
     <select id="getUnregisteredMapper" resultType="com.douzone.lis_back.domain.RegisterDTO">
-        select *
-        from prescribe as p left join collecting as c on p.prescribe_code = c.prescribe_code
-                            left join register as r on c.barcode = r.barcode and r.prescribe_code = c.prescribe_code
-                            left join visit as v on p.visit_code = v.visit_code
-        where p.status_code = "S" and c.cancel_barcode_dt is null and c.cancel_collecting_dt is null and r.cancel_register_dt is null;
+        SELECT p.prescribe_code AS prescribeCode, p.status_code AS statusCode, p.order_code AS orderCode, c.barcode AS barcode,
+               r.inspector_id AS inspectorId, v.patient_no AS patientNo, r.register_code AS registerCode, r.register_dt AS registerDt
+        FROM prescribe AS p LEFT JOIN collecting AS c ON p.prescribe_code = c.prescribe_code
+                            LEFT JOIN register AS r ON c.barcode = r.barcode and r.prescribe_code = c.prescribe_code
+                            LEFT JOIN visit AS v ON p.visit_code = v.visit_code
+        WHERE p.status_code IN ("D", "S") AND c.cancel_barcode_dt IS NULL AND c.cancel_collecting_dt IS NULL AND r.cancel_register_dt IS NULL;
     </select>
 
     <select id="getSearchRegisterMapper" resultType="com.douzone.lis_back.domain.RegisterDTO" parameterType="com.douzone.lis_back.domain.SearchDTO">
-        select *
-        from register as r left join collecting as c on r.barcode = c.barcode and r.prescribe_code = c.prescribe_code
-        left join prescribe as p on c.prescribe_code= p.prescribe_code
-        left join order_slip as o on p.order_code = o.order_code
-        left join visit as v on v.visit_code = p.visit_code
-        left join patient as pat on pat.patient_no = v.patient_no
-        where r.cancel_register_dt is null and p.status_code in ("D", "S")
+        SELECT r.register_code AS registerCode, r.barcode AS barcode, r.inspector_id AS inspectorId, r.prescribe_code AS prescribeCode,
+        r.register_dt AS registerDt, o.order_code AS orderCode, p.status_code AS statusCode, pat.patient_no AS patientNo
+        FROM register AS r LEFT JOIN collecting AS c ON r.barcode = c.barcode AND r.prescribe_code = c.prescribe_code
+        LEFT JOIN prescribe AS p ON c.prescribe_code= p.prescribe_code
+        LEFT JOIN order_slip AS o ON p.order_code = o.order_code
+        LEFT JOIN visit AS v ON v.visit_code = p.visit_code
+        LEFT JOIN patient AS pat ON pat.patient_no = v.patient_no
+        WHERE r.cancel_register_dt IS NULL AND p.status_code IN ("D", "S")
         <if test="barcode == ''">
-            and left(r.register_dt, 10) between #{stDate} and #{endDate}
+            AND LEFT(r.register_dt, 10) BETWEEN #{stDate} AND #{endDate}
         </if>
         <if test="barcode != ''">
-            and r.barcode LIKE concat('%',#{barcode},'%')
+            AND r.barcode LIKE concat('%',#{barcode},'%')
         </if>
         ORDER BY r.register_dt DESC
     </select>
 
     <select id="getSearchInspectionTypeMapper" resultType="com.douzone.lis_back.domain.InspectionTypeDTO" parameterType="String">
-        select *
-        from inspection_type
-        where order_code = #{orderCode}
+        SELECT baseline, inspection_code AS inspectionCode, inspection_name AS inspectionName, order_code AS orderCode, unit
+        FROM inspection_type
+        WHERE order_code = #{orderCode}
         ORDER BY inspection_code ASC;
     </select>
 
     <select id="getSelectConclusionMapper" resultType="com.douzone.lis_back.domain.ConclusionDTO" parameterType="com.douzone.lis_back.domain.SearchDTO">
-        select *
-        from conclusion as c
-                 left join register as r on c.register_code = r.register_code
-        where r.barcode = #{barcode} and r.cancel_register_id is null
+        SELECT c.figures AS figures, c.inspection_code AS inspectionCode, c.inspection_dt AS inspectionDt, c.note AS note,
+               c.result_no AS resultNo, r.barcode AS barcode, r.register_code AS registerCode
+        FROM conclusion AS c
+                 LEFT JOIN register AS r ON c.register_code = r.register_code
+        WHERE r.barcode = #{barcode} AND r.cancel_register_id IS NULL
         ORDER BY c.inspection_code ASC
     </select>
 
-    <select id="getPrescribeCode" resultType="String" parameterType="Map">
-        select c.prescribe_code
-        from collecting as c
-                 left join prescribe as p on c.prescribe_code = p.prescribe_code
-                 left join order_slip as o on o.order_code =p.order_code
-        where c.barcode = #{barcode} and o.order_code=#{orderCode};
-    </select>
-
     <select id="getUnsuitableStatus" resultType="com.douzone.lis_back.domain.UnsuitableStatusDTO">
-        select *
-        from unsuitable_status_management as u
-                 left join unsuitable_reason as ur on ur.unsuitable_reason_code = u.unsuitable_reason_code;
+        SELECT u.unsuitable_reason_code AS unsuitableReasonCode, u.barcode AS barcode, u.prescribe_code AS prescribeCode,
+               ur.unsuitable_reason_name AS unsuitableReasonName, u.unsuitable_reason_text AS unsuitableReasonText,
+               ur.unsuitable_status_code AS unsuitableStatusCode, u.unsuitable_update_dt AS unsuitableUpdateDt
+        FROM unsuitable_status_management AS u
+                 LEFT JOIN unsuitable_reason AS ur ON ur.unsuitable_reason_code = u.unsuitable_reason_code;
     </select>
 
     <insert id="insertConclusionBatchMapper" parameterType="com.douzone.lis_back.domain.ConclusionDTO">
@@ -81,9 +78,9 @@
     </update>
 
     <update id="updatePrescribeStatusMapper" parameterType="Object">
-        update prescribe
-        set status_code= #{status}
-        where prescribe_code = (select prescribe_code from register where register_code=#{registerCode} and cancel_register_dt is null);
+        UPDATE prescribe
+        SET status_code= #{status}
+        WHERE prescribe_code = (SELECT prescribe_code FROM register WHERE register_code=#{registerCode} AND cancel_register_dt IS NULL);
     </update>
 
 </mapper>

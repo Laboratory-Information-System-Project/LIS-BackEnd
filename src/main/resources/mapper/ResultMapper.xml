@@ -9,17 +9,17 @@
         SELECT DISTINCT v.patient_no, pt.patient_name, pt.patient_phonenumber, o.order_code, cn.result_no, r.register_dt, s.sample_name, p.prescribe_dt, i.INSPECTION_NAME, cn.figures, i.unit, i.baseline, cn.note
         FROM patient as pt, visit as v, prescribe as p, order_slip as o, collecting as cg, conclusion as cn, inspection_type as i, vessel as vl, classification as c, register as r, sample_type as s
         WHERE pt.patient_no = v.patient_no
-        AND v.visit_code = p.visit_code
-        AND p.order_code = o.order_code
-        AND p.status_code = "M"
-        AND o.vessel_code = vl.vessel_code
-        AND p.prescribe_code = cg.prescribe_code
-        AND o.classification_code = c.classification_code
-        AND cg.barcode = r.barcode
-        AND r.register_code = cn.register_code
-        AND i.inspection_code = cn.inspection_code
-        AND vl.sample_code = s.sample_code
-        AND o.order_code = i.order_code
+          AND v.visit_code = p.visit_code
+          AND p.order_code = o.order_code
+          AND p.status_code = "M"
+          AND o.vessel_code = vl.vessel_code
+          AND p.prescribe_code = cg.prescribe_code
+          AND o.classification_code = c.classification_code
+          AND cg.barcode = r.barcode
+          AND r.register_code = cn.register_code
+          AND i.inspection_code = cn.inspection_code
+          AND vl.sample_code = s.sample_code
+          AND o.order_code = i.order_code
         ORDER BY r.register_dt DESC;
     </select>
 
@@ -32,9 +32,11 @@
         <if test='patientNo != null and radioDate == "prescribedate".toString()'>
             where prescribe_dt between #{startDate} and #{endDate}
         </if>
+        <if test='orderSelect != "allOrder" '>
+            AND o.order_code = #{orderSelect}
+        </if>
         AND v.patient_no = #{patientNo}
         AND p.status_code = "M"
-        AND o.order_code = #{orderSelect}
         AND pt.patient_no = v.patient_no
         AND v.visit_code = p.visit_code
         AND p.order_code = o.order_code
@@ -54,19 +56,19 @@
         SELECT DISTINCT v.patient_no, pt.patient_name, pt.patient_phonenumber,o.order_code, cn.result_no, r.register_dt, s.sample_name, p.prescribe_dt, i.INSPECTION_NAME, cn.figures, i.unit, i.baseline, cn.note
         FROM patient as pt, visit as v, prescribe as p, order_slip as o, collecting as cg, conclusion as cn, inspection_type as i, vessel as vl, classification as c, register as r, sample_type as s
         WHERE v.patient_no = #{text}
-        AND pt.patient_no = v.patient_no
-        AND p.status_code = "M"
+          AND pt.patient_no = v.patient_no
+          AND p.status_code = "M"
 
-        AND v.visit_code = p.visit_code
-        AND p.order_code = o.order_code
-        AND o.vessel_code = vl.vessel_code
-        AND p.prescribe_code = cg.prescribe_code
-        AND o.classification_code = c.classification_code
-        AND cg.barcode = r.barcode
-        AND r.register_code = cn.register_code
-        AND i.inspection_code = cn.inspection_code
-        AND vl.sample_code = s.sample_code
-        AND o.order_code = i.order_code
+          AND v.visit_code = p.visit_code
+          AND p.order_code = o.order_code
+          AND o.vessel_code = vl.vessel_code
+          AND p.prescribe_code = cg.prescribe_code
+          AND o.classification_code = c.classification_code
+          AND cg.barcode = r.barcode
+          AND r.register_code = cn.register_code
+          AND i.inspection_code = cn.inspection_code
+          AND vl.sample_code = s.sample_code
+          AND o.order_code = i.order_code
         ORDER BY r.register_dt DESC;
     </select>
 

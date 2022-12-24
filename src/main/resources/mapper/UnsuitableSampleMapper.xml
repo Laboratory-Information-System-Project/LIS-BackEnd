@@ -23,6 +23,9 @@
         <if test="authority == 'inspector'">
             WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
         </if>
+        <if test="authority == 'admin'">
+            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
+        </if>
         <if test="authority == 'nurse'">
             WHERE c.barcode = #{barcode} AND p.status_code = 'B';
         </if>
@@ -46,6 +49,9 @@
         <if test="authority == 'inspector'">
             WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
         </if>
+        <if test="authority == 'admin'">
+            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
+        </if>
         <if test="authority == 'nurse'">
             WHERE c.barcode = #{barcode} AND p.status_code = 'B';
         </if>
@@ -53,20 +59,20 @@
 
     <select id="findUsersByUsername" resultType="Map" parameterType="String">
         SELECT user_id AS userId,
-        user_name AS userName,
-        user_email AS userEmail,
-        authority
+               user_name AS userName,
+               user_email AS userEmail,
+               authority
         FROM user
         WHERE authority != "검사자"  and user_name LIKE CONCAT('%', #{userName}, '%');
     </select>
 
     <select id="findAllUnsuitableReason" resultType="com.douzone.lis_back.domain.unsuitable.UnsuitableReasonDTO">
         SELECT r.unsuitable_reason_code,
-        r.unsuitable_reason_name,
-        r.unsuitable_status_code,
-        s.unsuitable_status_name
+               r.unsuitable_reason_name,
+               r.unsuitable_status_code,
+               s.unsuitable_status_name
         FROM unsuitable_reason AS r LEFT JOIN unsuitable_status AS s
-        ON r.unsuitable_status_code = s.unsuitable_status_code
+                                              ON r.unsuitable_status_code = s.unsuitable_status_code
         ORDER BY unsuitable_status_code DESC;
     </select>
 
@@ -87,14 +93,14 @@
 
     <select id="findUnsuitByBarcode" resultType="map" parameterType="long">
         SELECT m.unsuitable_reason_code AS unsuitableReasonCode,
-        m.notified_user_id AS notifiedUserId,
-        m.notificator_id AS notificatorId,
-        m.barcode,
-        m.prescribe_code AS prescribeCode,
-        s.unsuitable_status_name AS unsuitableStatusName,
-        r.unsuitable_reason_name AS unsuitableReasonName
+               m.notified_user_id AS notifiedUserId,
+               m.notificator_id AS notificatorId,
+               m.barcode,
+               m.prescribe_code AS prescribeCode,
+               s.unsuitable_status_name AS unsuitableStatusName,
+               r.unsuitable_reason_name AS unsuitableReasonName
         FROM unsuitable_status_management AS m LEFT JOIN unsuitable_reason AS r ON m.unsuitable_reason_code = r.unsuitable_reason_code
-        LEFT JOIN unsuitable_status AS s ON r.unsuitable_status_code = s.unsuitable_status_code
+                                               LEFT JOIN unsuitable_status AS s ON r.unsuitable_status_code = s.unsuitable_status_code
         WHERE barcode = #{barcode};
     </select>
 
