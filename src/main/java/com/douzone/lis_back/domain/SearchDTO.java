@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SearchDTO {
     private String barcode;
+    private String orderCode;
     private String stDate;
     private String endDate;
 }

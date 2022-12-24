@@ -111,8 +111,10 @@ pipeline {
                         sshagent (credentials: ['jenkins-server-privatekey']) {
 //                              sh "eval ${ssh-agent -s}"
                              sh "ssh -o StrictHostKeyChecking=no ubuntu@35.78.53.64 'sudo docker pull suk97/lis-backend'"
+                             sh "ssh -o StrictHostKeyChecking=no ubuntu@35.78.53.64 'sudo docker stop backend'"
                              sh "ssh -o StrictHostKeyChecking=no ubuntu@35.78.53.64 'sudo docker rm -f backend'"
                              sh "ssh -o StrictHostKeyChecking=no ubuntu@35.78.53.64 'sudo docker run -d --name backend -p 8080:8080 suk97/lis-backend'"
+
                         }
 
                     }

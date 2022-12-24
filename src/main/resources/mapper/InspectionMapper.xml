@@ -41,10 +41,11 @@
 
     <select id="getSelectConclusionMapper" resultType="com.douzone.lis_back.domain.ConclusionDTO" parameterType="com.douzone.lis_back.domain.SearchDTO">
         SELECT c.figures AS figures, c.inspection_code AS inspectionCode, c.inspection_dt AS inspectionDt, c.note AS note,
-               c.result_no AS resultNo, r.barcode AS barcode, r.register_code AS registerCode
+               c.result_no AS resultNo, r.barcode AS barcode, r.register_code AS registerCode, i.order_code AS orederCode
         FROM conclusion AS c
                  LEFT JOIN register AS r ON c.register_code = r.register_code
-        WHERE r.barcode = #{barcode} AND r.cancel_register_id IS NULL
+                 LEFT JOIN inspection_type AS i ON c.inspection_code = i.inspection_code
+        WHERE r.barcode = #{barcode} AND r.cancel_register_id IS NULL AND i.order_code = #{orderCode}
         ORDER BY c.inspection_code ASC
     </select>
 

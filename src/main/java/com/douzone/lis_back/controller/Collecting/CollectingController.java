@@ -30,8 +30,8 @@ public class CollectingController {
         List<Object> prescribeCodes = new ArrayList<>();
         String result = collectingService.collect(prescribeCodeList);
 
+        prescribeCodes.add(result);
         if("update success".equals(result)){
-            prescribeCodes.add(result);
             prescribeCodes.add("채혈");
             prescribeCodes.addAll(prescribeCodeList.get("prescribeCodeList"));
             prescribeService.updateStatus("C", prescribeCodeList.get("prescribeCodeList"));

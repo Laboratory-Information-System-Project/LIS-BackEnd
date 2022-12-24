@@ -25,7 +25,8 @@ public class CollectingServiceImpl implements CollectingService{
             return "collecting data already exists";
         }
 
-        int result = collectingMapper.updateCollectingData(prescribeCodeList.get("prescribeCodeList"), prescribeCodeList.get("userId").get(0));
+        int result = collectingMapper.updateCollectingData(prescribeCodeList.get("prescribeCodeList"),
+                prescribeCodeList.get("userId").get(0), prescribeCodeList.get("prescribeCodeList").size());
         log.info("{}", prescribeCodeList.get("prescribeCodeList").size());
         log.info("{}", result);
 
