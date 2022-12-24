@@ -44,16 +44,16 @@
     </select>
     <select id="patientData" resultType="com.douzone.lis_back.domain.patientdomain.PatientDomainDTO">
         select DISTINCT
-        patient.patient_no,patient_name,patient_age,patient_blood_type,
-        patient_height,patient_weight,patient_address,patient_phonenumber,
-        patient_resident_number,patient_gender,
-        collecting.cancel_barcode_dt,collecting.cancel_collecting_dt,
-        prescribe.status_code
+            patient.patient_no,patient_name,patient_age,patient_blood_type,
+            patient_height,patient_weight,patient_address,patient_phonenumber,
+            patient_resident_number,patient_gender,
+            collecting.cancel_barcode_dt,collecting.cancel_collecting_dt,
+            prescribe.status_code
         from collecting
-        join prescribe on collecting.prescribe_code = prescribe.prescribe_code
-        join visit on prescribe.visit_code = visit.visit_code
-        join patient on visit.patient_no = patient.patient_no
-        where collecting.barcode = #{barcode} and (prescribe.status_code = 'C' or prescribe.status_code = 'S') and collecting.cancel_barcode_dt is null and collecting.cancel_collecting_dt is null;
+                 join prescribe on collecting.prescribe_code = prescribe.prescribe_code
+                 join visit on prescribe.visit_code = visit.visit_code
+                 join patient on visit.patient_no = patient.patient_no
+        where collecting.barcode = #{barcode} and (prescribe.status_code = 'C' or prescribe.status_code = 'S') and collecting.cancel_barcode_dt is null and is_canceled_inspection = 0;
     </select>
 </mapper>
 
