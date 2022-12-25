@@ -46,7 +46,7 @@
         select DISTINCT
             patient.patient_no,patient_name,patient_age,patient_blood_type,
             patient_height,patient_weight,patient_address,patient_phonenumber,
-            patient_resident_number,patient_gender,
+            replace(patient_resident_number,substr(patient_resident_number,9),'******')patient_resident_number,patient_gender,
             collecting.cancel_barcode_dt,collecting.cancel_collecting_dt,
             prescribe.status_code
         from collecting

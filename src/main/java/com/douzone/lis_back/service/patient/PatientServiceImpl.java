@@ -20,12 +20,21 @@ public class PatientServiceImpl implements PatientService{
         List<HashMap<String,Object>> patientInfos = new ArrayList<>();
         if("환자번호".equals(searchCon)) {
             patientInfos = patientMapper.findPatientInfoByPatientNo(patientInfo);
+            masking(patientInfos);
         }
         if("이름".equals(searchCon)) {
             patientInfos = patientMapper.findPatientInfoByPatientName(patientInfo);
+            masking(patientInfos);
         }
 
         return patientInfos;
+    }
+
+    private static void masking(List<HashMap<String, Object>> patientInfos) {
+        patientInfos.stream().forEach(item-> {
+            String residentNo = item.get("PATIENT_RESIDENT_NUMBER").toString().split("-")[1].substring(0,1).concat("******");
+            item.put("PATIENT_RESIDENT_NUMBER", item.get("PATIENT_RESIDENT_NUMBER").toString().split("-")[0] + "-" + residentNo);
+        });
     }
 
     @Override
