@@ -4,6 +4,7 @@ import com.douzone.lis_back.mapper.collecting.BarcodeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Constructor;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class BarcodeServiceImpl implements BarcodeService {
     private static final String PRESCRIBE_CODE = "prescribe_code";
 
     @Override
-    public String createBarcode(Map<String, List<Object>> prescribeCodeList) {
+    public synchronized String createBarcode(Map<String, List<Object>> prescribeCodeList) {
         // 가장 최근 생성된 바코드를 찾아서 시퀀스와 날짜를 확인하고 새로운 바코드를 생성
         String barcode = barcodeMapper.findBarcode();
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
@@ -102,6 +103,7 @@ public class BarcodeServiceImpl implements BarcodeService {
         try {
             result = barcodeMapper.insertNewBarcode(prescribeCodeList, today, userId.toString());
         }catch(Exception e){
+            e.printStackTrace();
             return "failed create barcode!";
         }
 
@@ -111,4 +113,5 @@ public class BarcodeServiceImpl implements BarcodeService {
             return "failed create barcode!";
         }
     }
+
 }
