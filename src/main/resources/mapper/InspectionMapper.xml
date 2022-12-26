@@ -25,7 +25,7 @@
         LEFT JOIN patient AS pat ON pat.patient_no = v.patient_no
         WHERE r.cancel_register_dt IS NULL AND p.status_code IN ("D", "S")
         <if test="barcode == ''">
-            AND LEFT(r.register_dt, 10) BETWEEN #{stDate} AND #{endDate}
+            AND LEFT(r.register_        dt, 10) BETWEEN #{stDate} AND #{endDate}
         </if>
         <if test="barcode != ''">
             AND r.barcode LIKE concat('%',#{barcode},'%')
