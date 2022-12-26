@@ -11,8 +11,7 @@
         FROM prescribe AS p LEFT JOIN collecting AS c ON p.prescribe_code = c.prescribe_code
                             LEFT JOIN register AS r ON c.barcode = r.barcode and r.prescribe_code = c.prescribe_code
                             LEFT JOIN visit AS v ON p.visit_code = v.visit_code
-        WHERE p.status_code IN ("D", "S") AND c.cancel_barcode_dt IS NULL AND c.cancel_collecting_dt IS NULL AND r.cancel_register_dt IS NULL
-        ORDER BY p.status_code ASC,r.register_dt ASC;
+        WHERE p.status_code IN ("D", "S") AND c.cancel_barcode_dt IS NULL AND c.cancel_collecting_dt IS NULL AND r.cancel_register_dt IS NULL;
     </select>
 
     <select id="getSearchRegisterMapper" resultType="com.douzone.lis_back.domain.RegisterDTO" parameterType="com.douzone.lis_back.domain.SearchDTO">
@@ -25,7 +24,7 @@
         LEFT JOIN patient AS pat ON pat.patient_no = v.patient_no
         WHERE r.cancel_register_dt IS NULL AND p.status_code IN ("D", "S")
         <if test="barcode == ''">
-            AND LEFT(r.register_        dt, 10) BETWEEN #{stDate} AND #{endDate}
+            AND LEFT(r.register_dt, 10) BETWEEN #{stDate} AND #{endDate}
         </if>
         <if test="barcode != ''">
             AND r.barcode LIKE concat('%',#{barcode},'%')
