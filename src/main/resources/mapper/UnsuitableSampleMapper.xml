@@ -21,10 +21,10 @@
         LEFT JOIN order_slip AS o ON p.order_code = o.order_code
         LEFT JOIN vessel AS v ON v.vessel_code= o.vessel_code
         <if test="authority == 'inspector'">
-            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
+            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B', 'M');
         </if>
         <if test="authority == 'admin'">
-            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
+            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B', 'M');
         </if>
         <if test="authority == 'nurse'">
             WHERE c.barcode = #{barcode} AND p.status_code = 'B';
@@ -47,10 +47,10 @@
         LEFT JOIN order_slip AS o ON o.order_code = p.order_code
         LEFT JOIN inspection_status AS ii ON p.status_code = ii.status_code
         <if test="authority == 'inspector'">
-            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
+            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B', 'M');
         </if>
         <if test="authority == 'admin'">
-            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B');
+            WHERE c.barcode = #{barcode} AND p.status_code NOT IN('X', 'B', 'M');
         </if>
         <if test="authority == 'nurse'">
             WHERE c.barcode = #{barcode} AND p.status_code = 'B';
@@ -106,6 +106,6 @@
 
     <insert id="insertUnsuitableSampleInfo" parameterType="Map">
         INSERT INTO unsuitable_status_management (barcode, unsuitable_reason_code, unsuitable_reason_text, notificator_id, notified_user_id, unsuitable_update_dt, prescribe_code)
-        VALUES (#{sampleBarcode}, #{selectedReason}, #{query}, #{notificatorId}, #{notifiedId}, now(), #{prescribeCode});
+        VALUES (#{sampleBarcode}, #{selectedReason}, #{query}, #{notificatorId}, #{notifiedId}, DATE_ADD(now(), INTERVAL 9 HOUR), #{prescribeCode});
     </insert>
 </mapper>

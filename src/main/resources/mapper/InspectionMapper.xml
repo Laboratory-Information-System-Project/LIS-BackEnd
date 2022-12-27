@@ -63,7 +63,7 @@
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             <if test="index >= 0">
-                (#{item.inspectionCode},#{item.registerCode},#{item.figures},now(),#{item.note})
+                (#{item.inspectionCode},#{item.registerCode},#{item.figures},DATE_ADD(NOW(), INTERVAL 9 HOUR),#{item.note})
             </if>
         </foreach>;
     </insert>
@@ -72,7 +72,7 @@
         <foreach collection="list" item="item" index="index" separator=";">
             UPDATE conclusion
             <set>
-                inspection_dt=now(), figures= #{item.figures}, note= #{item.note}
+                inspection_dt=DATE_ADD(NOW(), INTERVAL 9 HOUR), figures= #{item.figures}, note= #{item.note}
             </set>
             WHERE result_no=#{item.resultNo}
         </foreach>

@@ -5,7 +5,7 @@
 
     <update id="updateCollectingData">
         update collecting
-        set collecting_dt = now(), collector_id = ${userId}, is_canceled_inspection = 0
+        set collecting_dt = DATE_ADD(NOW(), INTERVAL 9 HOUR), collector_id = ${userId}, is_canceled_inspection = 0
         where prescribe_code in (
         <foreach collection="barcodeList" item="item" separator=",">
             ${item}
@@ -27,7 +27,7 @@
 
     <update id="deleteCollectingData">
         update collecting
-           set cancel_collecting_dt = now(), cancel_collecting_id = #{userId},collecting_dt = null, collector_id = null,
+           set cancel_collecting_dt = DATE_ADD(NOW(), INTERVAL 9 HOUR), cancel_collecting_id = #{userId},collecting_dt = null, collector_id = null,
                is_canceled_inspection = 1
          where prescribe_code in(
              <foreach collection="barcodeList" item="item" separator=",">

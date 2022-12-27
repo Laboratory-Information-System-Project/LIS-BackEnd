@@ -9,7 +9,7 @@
         values
         <if test="barcodeList != null">
             <foreach collection="barcodeList" item="item" separator=",">
-                (#{item.inspectorId},#{item.barcode},now(),#{item.prescribeCode})
+                (#{item.inspectorId},#{item.barcode},DATE_ADD(NOW(), INTERVAL 9 HOUR),#{item.prescribeCode})
             </foreach>
         </if>
     </insert>
@@ -27,7 +27,7 @@
     <update id="updateMapper">
             UPDATE register
             <set>
-                cancel_register_id = #{cancelRegisterId}, cancel_register_dt = now()
+                cancel_register_id = #{cancelRegisterId}, cancel_register_dt = DATE_ADD(NOW(), INTERVAL 9 HOUR)
             </set>
             WHERE barcode = #{barcode};
     </update>

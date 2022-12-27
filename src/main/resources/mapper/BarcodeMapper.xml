@@ -44,7 +44,7 @@
                     from dual),
                 </otherwise>
             </choose>
-                now(), #{userId}, ${item}
+            DATE_ADD(DATE_ADD(NOW(), INTERVAL 9 HOUR), INTERVAL 9 HOUR), #{userId}, ${item}
             from dual
             where isnull((select c.barcode
             from collecting c
@@ -56,7 +56,7 @@
 
     <update id="deleteBarcode" parameterType="String">
     update collecting
-       set cancel_barcode_dt = now(), cancel_barcode_id = #{userId}
+       set cancel_barcode_dt = DATE_ADD(NOW(), INTERVAL 9 HOUR), cancel_barcode_id = #{userId}
      where prescribe_code in (
          <foreach collection="barcodeList" item="item" separator=",">
              ${item}
